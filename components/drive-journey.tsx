@@ -255,15 +255,60 @@ function mount(
     new THREE.MeshStandardMaterial({ color: 0x3e4634, roughness: 0.92 }),
   );
   road.rotation.x = -Math.PI / 2;
-  road.position.z = -length / 2 + 10;
+  road.position.set(0, 0.04, -length / 2 + 10);
   scene.add(road);
 
+  const sage = new THREE.Color(0xc8cab2);
+  const lowSage = new THREE.Color(0x6f775c);
+  const highSage = new THREE.Color(0xe7eadc);
+  function terrainHeight(x: number, along: number) {
+    const ax = Math.abs(x);
+    const wave = Math.sin(along * 0.04) * 0.45 + Math.sin(along * 0.012) * 0.7;
+    let height = 0;
+    if (ax > 4.6 && ax < 9.2) {
+      const t = (ax - 4.6) / 4.6;
+      height = -2.6 * Math.sin(Math.min(t, 1) * Math.PI);
+    } else if (ax >= 9.2 && ax < 22) {
+      const t = (ax - 9.2) / 12.8;
+      const ridge = Math.sin(Math.min(t, 1) * Math.PI);
+      height = ridge * (4.4 + wave);
+    } else if (ax >= 22 && ax < 40) {
+      const t = (ax - 22) / 18;
+      const basin = Math.sin(Math.min(t, 1) * Math.PI);
+      height = -2.3 * basin + wave * 0.2;
+    }
+    const trenchX = (x > 0 ? 1 : -1) * (29 + Math.sin(along * 0.02) * 2.2);
+    const trench = Math.abs(x - trenchX);
+    if (trench < 1.6) {
+      const falloff = 1 - trench / 1.6;
+      height -= 1.5 * falloff * falloff;
+    }
+    return height;
+  }
+  const groundGeo = new THREE.PlaneGeometry(110, length, 180, 220);
+  const groundPos = groundGeo.attributes.position;
+  const groundColors = new Float32Array(groundPos.count * 3);
+  for (let i = 0; i < groundPos.count; i += 1) {
+    const x = groundPos.getX(i);
+    const along = groundPos.getY(i);
+    const height = terrainHeight(x, along);
+    groundPos.setZ(i, height);
+    const color = sage.clone();
+    if (height < 0) color.lerp(lowSage, THREE.MathUtils.clamp(-height / 2.6, 0, 1));
+    else color.lerp(highSage, THREE.MathUtils.clamp(height / 4.4, 0, 1));
+    groundColors[i * 3] = color.r;
+    groundColors[i * 3 + 1] = color.g;
+    groundColors[i * 3 + 2] = color.b;
+  }
+  groundPos.needsUpdate = true;
+  groundGeo.setAttribute("color", new THREE.BufferAttribute(groundColors, 3));
+  groundGeo.computeVertexNormals();
   const ground = new THREE.Mesh(
-    new THREE.PlaneGeometry(90, length),
-    new THREE.MeshStandardMaterial({ color: 0xc8cab2, roughness: 1 }),
+    groundGeo,
+    new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 1, side: THREE.DoubleSide }),
   );
   ground.rotation.x = -Math.PI / 2;
-  ground.position.set(0, -0.03, road.position.z);
+  ground.position.set(0, 0, road.position.z);
   scene.add(ground);
 
   const dashGeo = new THREE.BoxGeometry(0.12, 0.03, 1.5);
@@ -272,7 +317,7 @@ function mount(
   const dashes = new THREE.InstancedMesh(dashGeo, dashMat, dashCount);
   const dummy = new THREE.Object3D();
   for (let i = 0; i < dashCount; i += 1) {
-    dummy.position.set(0, 0.02, 8 - i * 4);
+    dummy.position.set(0, 0.06, 8 - i * 4);
     dummy.updateMatrix();
     dashes.setMatrixAt(i, dummy.matrix);
   }
@@ -311,11 +356,14 @@ function mount(
     for (const edge of [-1, 1]) {
       const height = 1.4 + ((index + (edge > 0 ? 1 : 0)) % 4) * 0.85;
       const block = new THREE.Mesh(blockGeo, (index + (edge > 0 ? 1 : 0)) % 2 === 0 ? paperMat : blockMat);
+      const blockX = edge * 15;
+      const blockZ = sign.z + edge * 4;
+      const lift = terrainHeight(blockX, road.position.z - blockZ);
       block.scale.y = height;
-      block.position.set(edge * 8, height / 2, sign.z + edge * 4);
+      block.position.set(blockX, lift + height / 2, blockZ);
       scene.add(block);
       const lamp = new THREE.Mesh(lampGeo, lampMat);
-      lamp.position.set(edge * 5.1, 1.5, sign.z - 2);
+      lamp.position.set(edge * 4.15, 1.5, sign.z - 2);
       scene.add(lamp);
     }
   });
@@ -338,7 +386,29 @@ function mount(
   const tailRight = tail.clone();
   tail.position.set(-0.55, 0.5, 1.74);
   tailRight.position.set(0.55, 0.5, 1.74);
-  car.add(shell, cabin, tail, tailRight);
+  const plateCanvas = document.createElement("canvas");
+  plateCanvas.width = 512;
+  plateCanvas.height = 160;
+  const plateCtx = plateCanvas.getContext("2d");
+  if (plateCtx) {
+    plateCtx.fillStyle = "#ffffff";
+    plateCtx.fillRect(0, 0, plateCanvas.width, plateCanvas.height);
+    const family = getComputedStyle(document.body).fontFamily;
+    plateCtx.fillStyle = "#2c3328";
+    plateCtx.font = `600 72px ${family}`;
+    plateCtx.textAlign = "center";
+    plateCtx.textBaseline = "middle";
+    plateCtx.fillText("NGK 0369", plateCanvas.width / 2, plateCanvas.height / 2);
+  }
+  const plateTexture = new THREE.CanvasTexture(plateCanvas);
+  plateTexture.colorSpace = THREE.SRGBColorSpace;
+  textures.push(plateTexture);
+  const plate = new THREE.Mesh(
+    new THREE.PlaneGeometry(0.62, 0.18),
+    new THREE.MeshBasicMaterial({ map: plateTexture }),
+  );
+  plate.position.set(0, 0.36, 1.76);
+  car.add(shell, cabin, tail, tailRight, plate);
   car.position.set(0, 0, 6);
   scene.add(car);
 
