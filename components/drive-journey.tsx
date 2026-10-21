@@ -66,11 +66,12 @@ function paintSign(title: string, kicker: string) {
   if (!ctx) return canvas;
   ctx.fillStyle = "#f7f4ee";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
+  const family = getComputedStyle(document.body).fontFamily;
   ctx.fillStyle = "#5c6648";
-  ctx.font = "600 40px sans-serif";
+  ctx.font = `500 40px ${family}`;
   ctx.fillText(kicker.toUpperCase(), 64, 92);
   ctx.fillStyle = "#2c3328";
-  ctx.font = "700 78px serif";
+  ctx.font = `500 78px ${family}`;
   const words = title.split(" ");
   let line = "";
   let y = 210;
@@ -95,13 +96,6 @@ export function DriveJourney() {
   const active = signs.find((sign) => sign.id === activeId) ?? signs[0];
   const index = Math.max(0, signs.findIndex((sign) => sign.id === active.id));
   const progress = index / (signs.length - 1);
-
-  useEffect(() => {
-    document.body.dataset.drive = "1";
-    return () => {
-      delete document.body.dataset.drive;
-    };
-  }, []);
 
   useEffect(() => {
     const canvas = canvasRef.current;

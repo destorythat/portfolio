@@ -17,7 +17,7 @@
   --color-olive: var(--olive);
   --color-moss: var(--moss);
   --font-sans: var(--font-geist-sans);
-  --font-serif: var(--font-instrument);
+  --font-serif: var(--font-geist-sans);
 }
 
 * {
@@ -43,10 +43,6 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-geist-sans), "Segoe UI", sans-serif;
-}
-
-body[data-drive="1"] footer {
-  display: none;
 }
 
 html.has-wave-cursor,
