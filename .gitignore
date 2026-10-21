@@ -22,6 +22,7 @@
 
 # misc
 .DS_Store
+.playwright-cli
 *.pem
 
 # debug
