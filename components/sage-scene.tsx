@@ -63,9 +63,13 @@ function mountScene(THREE: typeof import("three"), canvas: HTMLCanvasElement) {
   const root = new THREE.Group();
   scene.add(root);
 
-  const disposed: { geometry: THREE.BufferGeometry; material: THREE.Material }[] = [];
+  const disposed: { geometry: import("three").BufferGeometry; material: import("three").Material }[] = [];
 
-  function addMesh(mesh: THREE.Mesh, geometry: THREE.BufferGeometry, material: THREE.Material) {
+  function addMesh(
+    mesh: import("three").Mesh,
+    geometry: import("three").BufferGeometry,
+    material: import("three").Material,
+  ) {
     disposed.push({ geometry, material });
     root.add(mesh);
     return mesh;

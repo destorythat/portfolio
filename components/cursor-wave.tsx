@@ -10,10 +10,13 @@ export function CursorWave() {
     const canvas = canvasRef.current;
     const cursor = cursorRef.current;
     if (!canvas || !cursor) return;
+    const surface = canvas;
+    const dot = cursor;
 
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const context = canvas.getContext("2d");
+    const context = surface.getContext("2d");
     if (!context) return;
+    const drawContext = context;
 
     document.documentElement.classList.add("has-wave-cursor");
 
@@ -23,11 +26,11 @@ export function CursorWave() {
 
     function resize() {
       const ratio = Math.min(window.devicePixelRatio, 1.5);
-      canvas.width = Math.floor(window.innerWidth * ratio);
-      canvas.height = Math.floor(window.innerHeight * ratio);
-      canvas.style.width = `${window.innerWidth}px`;
-      canvas.style.height = `${window.innerHeight}px`;
-      context.setTransform(ratio, 0, 0, ratio, 0, 0);
+      surface.width = Math.floor(window.innerWidth * ratio);
+      surface.height = Math.floor(window.innerHeight * ratio);
+      surface.style.width = `${window.innerWidth}px`;
+      surface.style.height = `${window.innerHeight}px`;
+      drawContext.setTransform(ratio, 0, 0, ratio, 0, 0);
     }
 
     function hideCursor(target: EventTarget | null) {
@@ -40,53 +43,53 @@ export function CursorWave() {
       pointer.x = event.clientX;
       pointer.y = event.clientY;
       pointer.on = !hideCursor(event.target);
-      cursor.style.opacity = pointer.on ? "1" : "0";
-      cursor.style.left = `${pointer.x}px`;
-      cursor.style.top = `${pointer.y}px`;
+      dot.style.opacity = pointer.on ? "1" : "0";
+      dot.style.left = `${pointer.x}px`;
+      dot.style.top = `${pointer.y}px`;
     }
 
     function onLeave() {
       pointer.on = false;
-      cursor.style.opacity = "0";
+      dot.style.opacity = "0";
     }
 
     function draw(now: number) {
-      context.clearRect(0, 0, window.innerWidth, window.innerHeight);
+      drawContext.clearRect(0, 0, window.innerWidth, window.innerHeight);
       if (!pointer.on) return;
 
       const time = reduce ? 0 : now / 260;
-      let previous = pointer;
+      let previous: { x: number; y: number } = pointer;
       trail.forEach((point) => {
         point.x += (previous.x - point.x) * 0.38;
         point.y += (previous.y - point.y) * 0.38;
         previous = point;
       });
 
-      context.lineCap = "round";
-      context.lineJoin = "round";
-      context.beginPath();
+      drawContext.lineCap = "round";
+      drawContext.lineJoin = "round";
+      drawContext.beginPath();
       trail.forEach((point, index) => {
         const lift = Math.sin(time * 3 + index * 0.55) * (16 - index * 0.45);
         const x = point.x;
         const y = point.y + lift;
-        if (index === 0) context.moveTo(x, y);
-        else context.lineTo(x, y);
+        if (index === 0) drawContext.moveTo(x, y);
+        else drawContext.lineTo(x, y);
       });
-      context.strokeStyle = "rgba(255, 255, 255, 0.92)";
-      context.lineWidth = 2.4;
-      context.stroke();
+      drawContext.strokeStyle = "rgba(255, 255, 255, 0.92)";
+      drawContext.lineWidth = 2.4;
+      drawContext.stroke();
 
-      context.beginPath();
+      drawContext.beginPath();
       for (let step = -26; step <= 26; step += 1) {
         const fade = Math.cos((step / 26) * (Math.PI / 2));
         const x = pointer.x + step * 7;
         const y = pointer.y + Math.sin(step * 0.42 + time * 4) * 18 * fade;
-        if (step === -26) context.moveTo(x, y);
-        else context.lineTo(x, y);
+        if (step === -26) drawContext.moveTo(x, y);
+        else drawContext.lineTo(x, y);
       }
-      context.strokeStyle = "rgba(255, 255, 255, 0.75)";
-      context.lineWidth = 1.5;
-      context.stroke();
+      drawContext.strokeStyle = "rgba(255, 255, 255, 0.75)";
+      drawContext.lineWidth = 1.5;
+      drawContext.stroke();
     }
 
     function tick(now: number) {

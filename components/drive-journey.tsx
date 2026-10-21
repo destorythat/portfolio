@@ -552,7 +552,7 @@ function mount(
     textures.forEach((texture) => texture.dispose());
     dustGeo.dispose();
     dustMat.dispose();
-    scene.traverse((object) => {
+    scene.traverse((object: import("three").Mesh) => {
       const mesh = object as import("three").Mesh;
       if (!mesh.isMesh) return;
       mesh.geometry?.dispose();
