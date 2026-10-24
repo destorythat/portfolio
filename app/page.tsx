@@ -1,5 +1,5 @@
-import { DriveJourney } from "@/components/drive-journey";
+import { PortfolioHome } from "@/components/portfolio-home";
 
 export default function Home() {
-  return <DriveJourney />;
+  return <PortfolioHome />;
 }

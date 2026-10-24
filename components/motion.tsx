@@ -37,6 +37,7 @@ export function Reveal({
   return (
     <div
       ref={ref}
+      data-shown={shown ? "true" : "false"}
       className={`transition duration-700 ease-out ${className} ${
         shown ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"
       }`}
@@ -45,6 +46,59 @@ export function Reveal({
       {children}
     </div>
   );
+}
+
+function splitStat(value: string) {
+  let index = 0;
+  while (index < value.length && value.charCodeAt(index) >= 48 && value.charCodeAt(index) <= 57) index += 1;
+  return { end: index > 0 ? Number(value.slice(0, index)) : 0, tail: value.slice(index), numeric: index > 0 };
+}
+
+export function CountUp({ value }: { value: string }) {
+  const ref = useRef<HTMLSpanElement>(null);
+  const [current, setCurrent] = useState(value);
+
+  useEffect(() => {
+    const { end, tail, numeric } = splitStat(value);
+    if (!numeric) {
+      setCurrent(value);
+      return;
+    }
+    const node = ref.current;
+    if (!node) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setCurrent(value);
+      return;
+    }
+    let frame = 0;
+    let start = 0;
+    const run = (now: number) => {
+      if (!start) start = now;
+      const progress = Math.min((now - start) / 900, 1);
+      setCurrent(`${Math.round(end * (1 - Math.pow(1 - progress, 3)))}${tail}`);
+      if (progress < 1) frame = window.requestAnimationFrame(run);
+    };
+    const observer = new IntersectionObserver(([entry]) => {
+      if (!entry?.isIntersecting) return;
+      observer.disconnect();
+      frame = window.requestAnimationFrame(run);
+    });
+    observer.observe(node);
+    return () => {
+      observer.disconnect();
+      window.cancelAnimationFrame(frame);
+    };
+  }, [value]);
+
+  return <span ref={ref}>{current}</span>;
+}
+
+export function ThisYear() {
+  const [year, setYear] = useState(2026);
+  useEffect(() => {
+    setYear(new Date().getFullYear());
+  }, []);
+  return <>{year}</>;
 }
 
 export function Tilt({ children }: { children: React.ReactNode }) {

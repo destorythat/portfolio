@@ -21,7 +21,7 @@ function buildSigns(): Sign[] {
       id: "start",
       kicker: "Start",
       title: profile.name,
-      body: `${profile.role}. Five years of products, from the interface through to the API.`,
+      body: `${profile.role}. Three years of products, from the interface through to the API.`,
     },
     {
       id: "story",

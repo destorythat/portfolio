@@ -11,7 +11,7 @@ export function PortfolioPath() {
       <section id="start" className="path-stop flex w-full flex-col justify-center px-6 sm:px-10 lg:px-16">
         <p className="text-sm text-olive">Stop 01 · {profile.role}</p>
         <HeroName className="rise relative z-10 mt-4 w-full cursor-none font-serif text-[clamp(4.5rem,8vw,8rem)] leading-[0.86] tracking-tight" />
-        <p className="mt-6 max-w-lg font-serif text-2xl italic">Five years, five products, one path.</p>
+        <p className="mt-6 max-w-lg font-serif text-2xl italic">Three years, five products, one path.</p>
         <a href="#story" className="mt-8 text-sm underline">
           Continue to the story
         </a>
