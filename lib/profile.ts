@@ -2,10 +2,12 @@ export const profile = {
   name: "Gokula Krishnan N",
   shortName: "Gokula Krishnan",
   initials: "GK",
+  email: "krish.naren63@gmail.com",
+  linkedin: "https://www.linkedin.com/in/gokul-krishnan-a14484261/",
   role: "Full Stack Developer",
-  years: "5+",
+  years: "3+",
   summary:
-    "Full Stack Developer with 5+ years of experience building scalable, high-performance web applications using the MERN stack (MongoDB, Express.js, React.js, Node.js), NestJS, and Next.js. Experienced in secure RESTful APIs, authentication and authorization (Keycloak, Auth0, Clerk), and cloud-native deployments on AWS. Skilled in integrating third-party services including Stripe, Razorpay, Meta Graph APIs, Google Ads API, and generative AI (Gemini, MCP tool calling). Strong focus on performance optimization, clean architecture, and reliable backend systems.",
+    "Full Stack Developer with 3+ years of experience building scalable, high-performance web applications using the MERN stack (MongoDB, Express.js, React.js, Node.js), NestJS, and Next.js. Experienced in secure RESTful APIs, authentication and authorization (Keycloak, Auth0, Clerk), and cloud-native deployments on AWS. Skilled in integrating third-party services including Stripe, Razorpay, Meta Graph APIs, Google Ads API, and generative AI (Gemini, MCP tool calling). Strong focus on performance optimization, clean architecture, and reliable backend systems.",
 };
 
 export type Project = {
@@ -216,10 +218,179 @@ export function getProject(slug: string) {
 }
 
 export const nav = [
-  { href: "/", label: "Home" },
-  { href: "/about", label: "About" },
-  { href: "/work", label: "Work" },
-  { href: "/experience", label: "Experience" },
-  { href: "/skills", label: "Skills" },
-  { href: "/contact", label: "Contact" },
+  { href: "/#about", id: "about", label: "About" },
+  { href: "/#services", id: "services", label: "Services" },
+  { href: "/#experience", id: "experience", label: "Experience" },
+  { href: "/#work", id: "work", label: "Work" },
+  { href: "/#stack", id: "stack", label: "Stack" },
+  { href: "/#contact", id: "contact", label: "Contact" },
 ];
+
+export const heroRoles = [
+  "MERN & NestJS engineer",
+  "Next.js product builder",
+  "SaaS & API developer",
+  "AI integration specialist",
+];
+
+export const heroText =
+  "I build SaaS platforms, secure APIs, and product dashboards. NestJS and Node.js on the backend; React and Next.js on the front; Gemini, Mem0, and MCP when the assistant has to save, approve, and publish. Three years of shipping full-stack systems.";
+
+export const facts = [
+  { label: "Experience", value: "3+ years" },
+  { label: "Focus", value: "MERN, NestJS, Next.js" },
+  { label: "Access", value: "Keycloak, Auth0, Clerk" },
+  { label: "Cloud", value: "AWS · EC2, S3" },
+  { label: "Payments", value: "Stripe, Razorpay" },
+  { label: "AI", value: "Gemini, Mem0, MCP" },
+];
+
+export const industries = [
+  { title: "Marketing & brands", detail: "On-brand posts, images, publishing" },
+  { title: "Compliance & fraud", detail: "Case handling and analytics" },
+  { title: "Human resources", detail: "National HRD reporting" },
+  { title: "Productivity SaaS", detail: "Tasks, billing, and access" },
+  { title: "E-commerce", detail: "Parts, orders, vendor inventory" },
+];
+
+export const principles = [
+  {
+    title: "Product systems",
+    copy: "Multi-tenant SaaS, dashboards, and workflows — from the first draft to publish, or from a report to a closed case.",
+  },
+  {
+    title: "Auth, billing, cloud",
+    copy: "Keycloak, Auth0, and Clerk for access. Stripe and Razorpay for payments. AWS for storage, compute, and monitoring.",
+  },
+  {
+    title: "AI in the product",
+    copy: "Gemini for on-brand writing, Mem0 for long-term brand memory, and MCP tool calling so the assistant can act.",
+  },
+  {
+    title: "Clean architecture",
+    copy: "Secure APIs, clear data boundaries, and code the next developer can pick up.",
+  },
+];
+
+export const services = [
+  {
+    title: "SaaS & multi-tenant platforms",
+    copy: "Workspaces, roles, and the workflows a product runs on — brand content, tasks, or billing in one system.",
+    tags: ["Multi-tenant", "Auth0", "Dashboards"],
+  },
+  {
+    title: "Node.js & NestJS APIs",
+    copy: "REST APIs, service boundaries, and the backend workflows that keep a product reliable under real use.",
+    tags: ["NestJS", "Node.js", "REST"],
+  },
+  {
+    title: "React & Next.js interfaces",
+    copy: "Dashboards and product UI wired to those APIs, with Redux where the client state needs a single source.",
+    tags: ["React", "Next.js", "Redux"],
+  },
+  {
+    title: "AI inside the workflow",
+    copy: "Assistants that write in a brand’s voice, remember that brand, and call tools to save, approve, and publish.",
+    tags: ["Gemini", "Mem0", "MCP"],
+  },
+  {
+    title: "Auth, billing & integrations",
+    copy: "Organization login, subscriptions, and OAuth connections to Instagram, Facebook Pages, and Google Ads.",
+    tags: ["Keycloak", "Stripe", "OAuth"],
+  },
+  {
+    title: "Commerce & real-time",
+    copy: "Search, vendor inventory, live order tracking, and media stored and watched on AWS.",
+    tags: ["Socket.io", "MongoDB", "AWS"],
+  },
+];
+
+export const results = [
+  {
+    value: "35%",
+    copy: "faster fraud-detection processing on Scam Detect, from tighter backend workflows.",
+    tag: "Compliance",
+  },
+  {
+    value: "40%",
+    copy: "less time spent on manual analysis, with React dashboards on the same platform.",
+    tag: "Analytics",
+  },
+  {
+    value: "5",
+    copy: "products across SaaS, compliance, national HRD, productivity, and commerce.",
+    tag: "Shipped work",
+  },
+  {
+    value: "1.5 yrs",
+    copy: "on Unidigify, from multi-tenant login through AI drafts to publishing.",
+    tag: "AI marketing",
+  },
+];
+
+export const steps = [
+  {
+    title: "Scope the product",
+    copy: "What the user does, what the system must remember, and which path ships first.",
+  },
+  {
+    title: "Shape the system",
+    copy: "Data model, API contracts, auth, and where AI, payments, or realtime belong.",
+  },
+  {
+    title: "Build in slices",
+    copy: "A working path at each step: draft then publish, or report, assign, and close.",
+  },
+  {
+    title: "Ship and hand over",
+    copy: "Deploy, watch the edges, and leave code the next person can read.",
+  },
+];
+
+export const projectTypes = [
+  "New web app or SaaS",
+  "NestJS / Node.js API",
+  "React / Next.js product",
+  "AI assistant in a product",
+  "Auth, billing, or third-party APIs",
+  "Bug fixing and maintenance",
+  "Something else",
+];
+
+export const marqueeA = [
+  "NestJS",
+  "Node.js",
+  "Express",
+  "React",
+  "Next.js",
+  "TypeScript",
+  "PostgreSQL",
+  "MongoDB",
+  "Redis",
+  "TypeORM",
+];
+
+export const marqueeB = [
+  "Auth0",
+  "Keycloak",
+  "Clerk",
+  "Stripe",
+  "Razorpay",
+  "Gemini",
+  "MCP",
+  "AWS",
+  "Docker",
+  "Socket.io",
+  "Tailwind CSS",
+  "Playwright",
+];
+
+export const workFilters = ["All", "SaaS", "AI", "APIs", "E-commerce"] as const;
+
+export function projectMatches(project: Project, filter: (typeof workFilters)[number]) {
+  if (filter === "All") return true;
+  if (filter === "SaaS") return project.slug === "unidigify" || project.slug === "work-sphere";
+  if (filter === "AI") return project.slug === "unidigify";
+  if (filter === "E-commerce") return project.slug === "sparewares";
+  return project.stack.includes("NestJS");
+}
